@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Movie Search App</title>
+    <style>
+        *{
+            background-color: skyblue;
+        }
+        #apphead{
+            text-align: center;
+        }
+        #search_input{
+            margin-left:400px;
+            width:400px;
+            background-color: azure;
+        }
+        #Sbtn{
+            transform : translateX(-50%);
+            background-color:orange;
+            color : white;
+        }
+        #display {
+            text-align: center;
+            margin-top:30px;
+        }
+    </style>
+</head>
+
+<body>
+    <h1 id="apphead">MOVIE SEARCH APP</h1>
+    <input type="text" id="search_input" placeholder="eg:Guardians of the Galaxy Vol. 2">
+    <button id="Sbtn" onclick="searchMovie()">SEARCH</button>
+
+    <div id="display">Result</div>
+
+    <script>
+        function searchMovie() {
+            let searchInput = document.getElementById("search_input").value;
+
+            fetch(`https://www.omdbapi.com/?i=tt3896198&apikey=7910f82c`)
+                .then(function(response) {
+                    return response.json();
+                })
+                .then(function(finalresponse) {
+                    if (finalresponse.Response === "True") {
+                        displayMovie(finalresponse);
+                    } else {
+                        document.getElementById("display").innerHTML = "Movie Not Found";
+                    }
+                })
+                .catch(function() {
+                    console.log("Error");
+                });
+        }
+
+        function displayMovie(movie) {
+            let resultContainer = document.getElementById('display');
+            resultContainer.innerHTML = '';
+
+            let div = document.createElement("div");
+
+            let image = document.createElement("img");
+            image.src = movie.Poster;
+
+            let title = document.createElement("p");
+            title.textContent = movie.Title;
+
+            let actors = document.createElement("p");
+            actors.textContent = "Actors: " + movie.Actors;
+
+            div.appendChild(image);
+            div.appendChild(title);
+            div.appendChild(actors);
+
+            resultContainer.appendChild(div);
+        }
+    </script>
+</body>
+</html>
